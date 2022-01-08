@@ -22,6 +22,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @Author: Chenyz
  * @Description: 知识图谱节点操作接口
@@ -39,7 +41,7 @@ public class GraphController {
 
     @ApiOperation("根据id查找知识图谱")
     @GetMapping("/{projectId}")
-    @PreAuthorize("@securityChecker.checkByProjectId(#projectId)")
+//    @PreAuthorize("@securityChecker.checkByProjectId(#projectId)")
     public ResponseEntity<GraphVO> getGraphByProjectId(@PathVariable("projectId") int projectId) {
         GraphVO graphVO = graphService.getGraphByProjectId(projectId);
         return ResponseUtils.create(graphVO, HttpStatus.OK);
@@ -141,6 +143,13 @@ public class GraphController {
     @PostMapping("/projectQuery")
     public ResponseEntity<ResponseVO> projectQuery(@RequestBody HelperQuestionVO helperQuestionVO) {
         String res = graphService.projectQuery(helperQuestionVO.getText());
+        return ResponseUtils.success(res);
+    }
+
+    @ApiOperation("查询相关的项目new")
+    @PostMapping("/projectQueryNew")
+    public ResponseEntity<List<Integer>> projectQueryNew(@RequestBody HelperQuestionVO helperQuestionVO) {
+        List<Integer> res = graphService.projectQueryNew(helperQuestionVO.getText());
         return ResponseUtils.success(res);
     }
 }

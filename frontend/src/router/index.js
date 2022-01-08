@@ -1,11 +1,11 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import Vue from 'vue';
+import Router from 'vue-router';
 
-import Home from '@/views/Home.vue'
-import { $message } from '../common/utils'
-import store from '../store'
+import Home from '@/views/Home.vue';
+import { $message } from '../common/utils';
+import store from '../store';
 
-Vue.use(Router)
+Vue.use(Router);
 
 const router = new Router({
   routes: [
@@ -16,57 +16,62 @@ const router = new Router({
         {
           path: '',
           name: 'Login',
-          component: () => import('@/modules/user/components/Login.vue')
+          component: () => import('@/modules/user/components/Login.vue'),
         },
         {
           path: 'register',
           name: 'Register',
-          component: () => import('@/modules/user/components/Register.vue')
-        }
-      ]
+          component: () => import('@/modules/user/components/Register.vue'),
+        },
+      ],
+    },
+    {
+      path: '/search',
+      name: 'Search',
+      component: () => import('@/views/Search.vue'),
     },
     {
       path: '/',
       name: 'Home',
       component: Home,
       meta: {
-        requireLogin: true
+        requireLogin: true,
       },
       children: [
         {
           path: '',
           name: 'HomeProjects',
-          component: () => import('@/modules/home/components/HomeProjects.vue')
+          component: () => import('@/modules/home/components/HomeProjects.vue'),
         },
         {
           path: 'square',
           name: 'HomeSquare',
-          component: () => import('@/modules/home/components/HomeSquare.vue')
+          component: () => import('@/modules/home/components/HomeSquare.vue'),
         },
         {
           path: 'chat',
           name: 'Chat',
-          component: () => import('@/modules/home/components/Chat.vue')
+          component: () => import('@/modules/home/components/Chat.vue'),
         },
         {
           path: 'tutorial',
           name: 'Tutorial',
-          component: () => import('@/modules/home/components/Tutorial.vue')
+          component: () => import('@/modules/home/components/Document.vue'),
         },
         {
           path: 'systemdesign',
           name: 'SystemDesign',
-          component: () => import('@/modules/home/components/SystemDesign.vue')
+          component: () => import('@/modules/home/components/Document.vue'),
         },
-      ]
+      ],
     },
     {
       path: '/graph/:projectId',
       name: 'Graph',
       component: () => import('@/views/Graph.vue'),
       meta: {
-        requireLogin: true
-      }
+        requireLogin: true,
+      },
     },
     // {
     //   path: '/chat/:projectId',
@@ -81,46 +86,46 @@ const router = new Router({
       name: 'Smarthelper',
       component: () => import('@/views/Smarthelper.vue'),
       meta: {
-        requireLogin: true
-      }
+        requireLogin: true,
+      },
     },
     {
       path: '/notfound',
       name: 'Notfound',
-      component: () => import('@/views/Notfound.vue')
+      component: () => import('@/views/Notfound.vue'),
     },
     {
       path: '*',
-      redirect: '/notfound'
-    }
-  ]
-})
+      redirect: '/notfound',
+    },
+  ],
+});
 
-let recentRoute = null
+let recentRoute = null;
 
 export const setRecentRoute = to => {
-  recentRoute = to || router.currentRoute
-  console.log('set recentRoute', recentRoute)
-}
+  recentRoute = to || router.currentRoute;
+  console.log('set recentRoute', recentRoute);
+};
 
 const setRecentAndGoLogin = (to, next, msg) => {
-  setRecentRoute(to)
-  $message(msg, 'error')
-  next('/user')
-}
+  setRecentRoute(to);
+  $message(msg, 'error');
+  next('/user');
+};
 
 const goNextWithCheck = next => {
   if (recentRoute) {
-    const target = recentRoute
-    recentRoute = null
-    next(target)
+    const target = recentRoute;
+    recentRoute = null;
+    next(target);
   } else {
-    next()
+    next();
   }
-}
+};
 
 router.beforeEach((to, from, next) => {
-  const token = localStorage.getItem('coin-token')
+  const token = localStorage.getItem('coin-token');
   if (to.meta.requireLogin) {
     // need login
     if (token) {
@@ -129,32 +134,32 @@ router.beforeEach((to, from, next) => {
         // repull userInfo
         store.dispatch('getUserInfo').then(res => {
           if (res) {
-            goNextWithCheck(next)
+            goNextWithCheck(next);
           } else {
-            setRecentAndGoLogin(to, next, 'token 过期，请重新登入')
+            setRecentAndGoLogin(to, next, 'token 过期，请重新登入');
           }
-        })
+        });
       } else {
-        goNextWithCheck(next)
+        goNextWithCheck(next);
       }
     } else {
       // no token
-      setRecentAndGoLogin(to, next, '请先完成登陆')
+      setRecentAndGoLogin(to, next, '请先完成登陆');
     }
   } else {
     // no need login
-    next()
+    next();
   }
-})
+});
 
-const originalPush = Router.prototype.push
+const originalPush = Router.prototype.push;
 Router.prototype.push = function push(location, onResolve, onReject) {
   if (onResolve || onReject)
-    return originalPush.call(this, location, onResolve, onReject)
+    return originalPush.call(this, location, onResolve, onReject);
   return originalPush.call(this, location).catch(failure => {
-    console.log(failure)
-    return failure
-  })
-}
+    console.log(failure);
+    return failure;
+  });
+};
 
-export default router
+export default router;

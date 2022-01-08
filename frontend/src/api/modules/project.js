@@ -2,37 +2,43 @@ export default {
   prefix: '/project',
   configs: {
     getProjectInfo(projectId) {
-      return { path: `/${projectId}` }
+      return { path: `/${projectId}` };
     },
     getListByUserId(userId) {
-      return { path: `/listByUserId/${userId}` }
+      return { path: `/listByUserId/${userId}` };
     },
     createProject(projectInfo) {
-      return { path: '/create', method: 'POST', data: projectInfo }
+      return { path: '/create', method: 'POST', data: projectInfo };
     },
     exportProjectXml(projectId) {
-      return { path: `/export/${projectId}` }
+      return { path: `/export/${projectId}` };
     },
     updateName(data) {
-      return { path: '/updateProjectName', method: 'POST', data }
+      return { path: '/updateProjectName', method: 'POST', data };
     },
     updateDescription(data) {
-      return { path: '/updateProjectDescription', method: 'POST', data }
+      return { path: '/updateProjectDescription', method: 'POST', data };
     },
     updateStatus(data) {
-      return { path: '/updateProjectStatus', method: 'POST', data }
+      return { path: '/updateProjectStatus', method: 'POST', data };
     },
     getAllListByPageNo(pageNo) {
-      return { path: `/publicProject/${pageNo}` }
+      return { path: `/publicProject/${pageNo}` };
     },
     getOwnListByPageNo(data) {
-      return { path: `/listByUserId/${data.userId}/${data.pageNo}` }
+      return { path: `/listByUserId/${data.userId}/${data.pageNo}` };
     },
     getAllListCount() {
-      return { path: '/countPublicProject' }
+      return { path: '/countPublicProject' };
     },
     getOwnListCount(userId) {
-      return { path: `/countByUserId/${userId}` }
-    }
-  }
-}
+      return { path: `/countByUserId/${userId}` };
+    },
+    updateProjectImage(image, projectid) {
+      const data = new FormData();
+      data.append('image', image);
+      data.append('projectId', projectid);
+      return { path: `/updateProjectImage`, method: 'POST', data };
+    },
+  },
+};

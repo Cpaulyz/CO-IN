@@ -26,14 +26,14 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex';
 
 export default {
   name: 'GraphModifyNameModal',
   data() {
     return {
       newName: '',
-    }
+    };
   },
   computed: {
     ...mapGetters(['showModifyNameModal', 'projectInfo']),
@@ -42,28 +42,27 @@ export default {
     ...mapMutations(['setShowModifyNameModal']),
     ...mapActions(['updateProjectName']),
     disablePanel() {
-      this.setShowModifyNameModal(false)
+      this.setShowModifyNameModal(false);
     },
     commitUpdateName() {
-      const projectId = Number(this.$route.params.projectId)
+      const projectId = Number(this.$route.params.projectId);
       const data = {
         name: this.newName,
         projectId,
-      }
-      this.updateProjectName(data).then((res) => {
-        const { success, msg } = res
+      };
+      this.updateProjectName(data).then(res => {
+        const { success, msg } = res;
         if (success) {
-          this.setShowModifyNameModal(false)
-          this.$message.success(msg)
-          this.$router.go(0)
+          this.setShowModifyNameModal(false);
+          this.$message.success(msg);
+          this.$router.go(0);
         } else {
-          this.$message.error(msg)
+          this.$message.error(msg);
         }
-      })
+      });
     },
   },
-}
+};
 </script>
 
-<style>
-</style>
+<style></style>

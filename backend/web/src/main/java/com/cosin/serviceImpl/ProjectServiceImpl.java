@@ -14,6 +14,7 @@ import com.cosin.model.po.ProjectPO;
 import com.cosin.model.po.RelationPO;
 import com.cosin.model.dto.ProjectDTO;
 import com.cosin.service.ProjectService;
+import com.cosin.util.AliOssService;
 import com.cosin.util.PageHelper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
@@ -22,9 +23,11 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -41,6 +44,8 @@ public class ProjectServiceImpl implements ProjectService {
     RelationRepository relationRepository;
     @Autowired
     GraphIdRepository graphIdRepository;
+
+    private static final String imagePrefix = " https://software-2.oss-cn-beijing.aliyuncs.com/sec3/";
 
     private static XmlMapper xmlMapper;
     static {
@@ -111,6 +116,20 @@ public class ProjectServiceImpl implements ProjectService {
     public boolean updateProjectDescription(int projectId, String description) {
         int res = projectMapper.updateProjectDescription(projectId,description);
         return res>0;
+    }
+
+    @Override
+    @CacheEvict(key = "#projectId",value = "projectInfo")
+    public String updateProjectImage(int projectId, MultipartFile image) {
+        String uuid = UUID.randomUUID().toString().replaceAll("-","");
+        String fileName = uuid+".png";
+        AliOssService.upload(image,fileName);
+        int res = projectMapper.updateProjectImage(projectId,imagePrefix+fileName);
+        if(res>0){
+            return imagePrefix+fileName;
+        }else {
+            return "";
+        }
     }
 
 

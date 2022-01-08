@@ -56,20 +56,22 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions } from 'vuex';
+
+import { ROUTE_PATH } from '../../../router/config';
 
 const validateUsername = (rule, value, callback) => {
   if (value === '') {
-    callback(new Error('请输入用户名'))
+    callback(new Error('请输入用户名'));
   } else {
-    callback()
+    callback();
   }
-}
+};
 const validateLoginPassword = (rule, value, callback) => {
   if (value === '') {
-    callback(new Error('请输入密码'))
+    callback(new Error('请输入密码'));
   }
-}
+};
 
 export default {
   name: 'Login',
@@ -77,40 +79,40 @@ export default {
     return {
       loginForm: {
         username: '',
-        password: ''
+        password: '',
       },
       loginRules: {
         username: [{ validator: validateUsername, trigger: 'blur' }],
-        password: [{ validator: validateLoginPassword, trigger: 'blur' }]
-      }
-    }
+        password: [{ validator: validateLoginPassword, trigger: 'blur' }],
+      },
+    };
   },
   methods: {
     ...mapActions(['userLogin']),
     login() {
-      const userInfo = { ...this.loginForm }
+      const userInfo = { ...this.loginForm };
       this.userLogin(userInfo).then(success => {
         if (success) {
-          this.$router.push('/')
+          this.$router.push(ROUTE_PATH.Search);
         }
-      })
+      });
     },
     gotoRegister() {
-      this.$router.push('/user/register')
+      this.$router.push(ROUTE_PATH.Register);
     },
     bindEnter(e) {
       if (e.keyCode === 13) {
-        this.login()
+        this.login();
       }
-    }
+    },
   },
   mounted() {
-    document.addEventListener('keydown', this.bindEnter)
+    document.addEventListener('keydown', this.bindEnter);
   },
   destroyed() {
-    document.removeEventListener('keydown', this.bindEnter)
-  }
-}
+    document.removeEventListener('keydown', this.bindEnter);
+  },
+};
 </script>
 
 <style>

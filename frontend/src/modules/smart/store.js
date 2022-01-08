@@ -1,8 +1,8 @@
-import api from '@/api/dispatcher'
-import coinPng from '../../assets/coin.png'
-import logoPng from '../../assets/logo.png'
-import { adapter } from './utils/function'
-import { linebreakFormat } from '../smart/utils/function'
+import api from '@/api/dispatcher';
+import coinPng from '../../assets/coin.png';
+import logoPng from '../../assets/logo.png';
+import { adapter } from './utils/function';
+import { linebreakFormat } from '../smart/utils/function';
 
 const smart = {
   state: {
@@ -12,15 +12,15 @@ const smart = {
         text: { text: '您好~我是 co$in helper，今天想找什么菜呢？' },
         mine: false,
         name: 'coin小助手',
-        img: coinPng
-      }
+        img: coinPng,
+      },
     ],
     graphDialogueQues: '',
     entityQueryQues: '',
     relationQueryQues: {
       sourceName: '',
       targetName: '',
-      relName: ''
+      relName: '',
     },
     entityQueryGraphData: null,
     relationQueryGraphData: null,
@@ -28,113 +28,113 @@ const smart = {
     relationNames: [],
     dialogueAnswer: '',
     hotQuestions: [],
-    centralityTableData: []
+    centralityTableData: [],
   },
   mutations: {
     setTaleList(state, data) {
-      state.taleList = data
+      state.taleList = data;
     },
     pushTaleList(state, data) {
-      state.taleList.push(data)
+      state.taleList.push(data);
     },
     setGraphDialogueQues(state, data) {
-      state.graphDialogueQues = data
+      state.graphDialogueQues = data;
     },
     setEntityQueryQues(state, data) {
-      state.entityQueryQues = data
+      state.entityQueryQues = data;
     },
     setRelationQueryQues(state, data) {
-      state.relationQueryQues = data
+      state.relationQueryQues = data;
     },
     setEntityQueryGraphData(state, data) {
-      state.entityQueryGraphData = data
+      state.entityQueryGraphData = data;
     },
     setRelationQueryGraphData(state, data) {
-      state.relationQueryGraphData = data
+      state.relationQueryGraphData = data;
     },
     setRelationNames(state, data) {
-      state.relationNames = data
+      state.relationNames = data;
     },
     setDialogueQueryGraphData(state, data) {
-      state.dialogueQueryGraphData = data
+      state.dialogueQueryGraphData = data;
     },
     setDialogueAnswer(state, data) {
-      state.dialogueAnswer = data
+      state.dialogueAnswer = data;
     },
     setHotQuestions(state, data) {
-      state.hotQuestions = data
+      state.hotQuestions = data;
     },
     setCentralityTableData(state, data) {
-      state.centralityTableData = data
-    }
+      state.centralityTableData = data;
+    },
   },
   actions: {
     verifyInitiate: async ({ commit }, projectId) => {
-      const res = await api.verifyInitiate(projectId)
-      return res.data
+      const res = await api.verifyInitiate(projectId);
+      return res.data;
     },
     initiateGraph: async ({ commit }, projectId) => {
-      const res = await api.initGraph(projectId)
-      return res
+      const res = await api.initGraph(projectId);
+      return res;
     },
     sendQuestionChat: async ({ commit }, data) => {
-      const { text, username } = data
-      const res = await api.getProjectQuery({ text })
+      const { text, username } = data;
+      const res = await api.getProjectQuery({ text });
       // console.log('sendQuestionChat', res)
       const reqTale = {
-        text: { text: text },
+        text: { text },
         mine: true,
         name: username,
-        img: logoPng
-      }
+        img: logoPng,
+      };
       const answer =
-        res.status === 200 ? linebreakFormat(res.data.msg) : 'server error'
+        res.status === 200 ? linebreakFormat(res.data.msg) : 'server error';
       const resTale = {
         text: { text: answer },
         mine: false,
         name: 'coin小助手',
-        img: coinPng
-      }
-      return { reqTale, resTale }
+        img: coinPng,
+      };
+      return { reqTale, resTale };
     },
     smartEntityQuery: async ({ commit }, data) => {
-      const res = await api.entityQuery(data)
+      const res = await api.entityQuery(data);
       // console.log('smartEntityQuery', res.data)
-      const graphData = res.data
-      commit('setEntityQueryGraphData', graphData)
-      return graphData
+      const graphData = res.data;
+      commit('setEntityQueryGraphData', graphData);
+      return graphData;
     },
     smartRelationQuery: async ({ commit }, data) => {
-      const res = await api.relationQuery(data)
+      const res = await api.relationQuery(data);
       // console.log('smartRelationQuery', res.data)
-      const graphData = res.data
-      commit('setRelationQueryGraphData', graphData)
-      return graphData
+      const graphData = res.data;
+      commit('setRelationQueryGraphData', graphData);
+      return graphData;
     },
     smartDialogueQuery: async ({ commit }, data) => {
-      const res = await api.askQuestion(data)
+      const res = await api.askQuestion(data);
       // console.log('smartDialogueQuery', res)
-      const { graph, text } = res.data
-      commit('setDialogueQueryGraphData', graph)
-      commit('setDialogueAnswer', text)
-      return graph
+      const { graph, text } = res.data;
+      commit('setDialogueQueryGraphData', graph);
+      commit('setDialogueAnswer', text);
+      return graph;
     },
     getRelationNames: async ({ commit }, projectId) => {
-      const res = await api.getRelations(projectId)
+      const res = await api.getRelations(projectId);
       // console.log('getRelationNames', res)
-      commit('setRelationNames', res.data)
+      commit('setRelationNames', res.data);
     },
     getHotQuestionList: async ({ commit }, projectId) => {
-      const res = await api.getHotQuestions(projectId)
+      const res = await api.getHotQuestions(projectId);
       // console.log('getHotQuestionList', res)
-      const hotListTarget = adapter(res.data)
-      commit('setHotQuestions', hotListTarget)
+      const hotListTarget = adapter(res.data);
+      commit('setHotQuestions', hotListTarget);
     },
     getCentralityData: async ({ commit }, projectId) => {
-      const res = await api.getCentrality(projectId)
+      const res = await api.getCentrality(projectId);
       // console.log('getCentralityData', res.data)
-      commit('setCentralityTableData', res.data)
-    }
+      commit('setCentralityTableData', res.data);
+    },
   },
   getters: {
     taleList: state => state.taleList,
@@ -147,8 +147,8 @@ const smart = {
     dialogueQueryGraphData: state => state.dialogueQueryGraphData,
     dialogueAnswer: state => state.dialogueAnswer,
     hotQuestions: state => state.hotQuestions,
-    centralityTableData: state => state.centralityTableData
-  }
-}
+    centralityTableData: state => state.centralityTableData,
+  },
+};
 
-export default smart
+export default smart;

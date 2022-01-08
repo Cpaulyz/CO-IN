@@ -93,4 +93,11 @@ public interface GraphService {
      */
     String projectQuery(String sentence);
 
+    /**
+     * 查询项目
+     * @param sentence
+     * @return 符合的项目id
+     */
+    List<Integer> projectQueryNew(String sentence);
+
 }

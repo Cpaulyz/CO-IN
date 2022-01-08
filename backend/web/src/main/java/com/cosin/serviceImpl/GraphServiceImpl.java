@@ -19,6 +19,7 @@ import com.cosin.service.ProjectService;
 import com.hankcs.hanlp.seg.Segment;
 import com.hankcs.hanlp.seg.common.Term;
 import com.hankcs.hanlp.tokenizer.StandardTokenizer;
+import io.swagger.models.auth.In;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -261,6 +262,32 @@ public class GraphServiceImpl implements GraphService {
             res = "小助手为您找到：\\n" + res;
         }
         System.out.println(res);
+        return res;
+    }
+
+    @Override
+    public List<Integer> projectQueryNew(String sentence) {
+        HashMap<Integer, List<String>> map = new HashMap<>();
+        List<Term> termList = StandardTokenizer.segment(sentence);
+        for (Term t : termList) {
+            if (t.nature.startsWith('n')) { // 提取名词
+                System.out.println("nword:" + t.word);
+                List<NodePO> nodePOS = nodeRepository.findByNameFuzzy(transferFuzzy(t.word));
+                for (NodePO node : nodePOS) {
+                    if (!map.containsKey(node.getProjectId())) {
+                        map.put(node.getProjectId(), new ArrayList<>());
+                    }
+                    map.get(node.getProjectId()).add(node.getName());
+                }
+            }
+        }
+        List<Integer> res = new ArrayList<>();
+        for (int projectId : map.keySet()) {
+            ProjectDTO project = projectService.getProjectById(projectId);
+            if (project.getStatus() == ProjectStatusEnum.PUBLIC) {
+                res.add(projectId);
+            }
+        }
         return res;
     }
 

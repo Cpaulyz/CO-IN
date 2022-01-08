@@ -1,10 +1,10 @@
 package com.cosin.controller;
 
-import com.cosin.infrastructure.security.SecurityChecker;
 import com.cosin.model.dto.ProjectDTO;
 import com.cosin.model.vo.ResponseVO;
 import com.cosin.model.vo.project.*;
 import com.cosin.service.ProjectService;
+import com.cosin.util.AliOssService;
 import com.cosin.util.ResponseUtils;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -15,7 +15,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -96,6 +99,32 @@ public class ProjectController {
         boolean res = projectService.updateProjectDescription(projectDescriptionVO.getProjectId(),projectDescriptionVO.getDescription());
         if(res){
             return ResponseUtils.success(UPDATE_SUCCESS);
+        }else{
+            return ResponseUtils.failure(UPDATE_FAILURE);
+        }
+    }
+
+//    @ApiOperation("更新知识图谱项目主图")
+//    @PostMapping("/updateProjectImage")
+//    @PreAuthorize("@securityChecker.checkByProjectId(#projectImageVO.projectId)")
+//    public ResponseEntity<ResponseVO> updateProjectImage(@RequestBody ProjectImageVO projectImageVO) {
+//        boolean res = projectService.updateProjectImage(projectImageVO.getProjectId(),projectImageVO.getImage());
+//        if(res){
+//            return ResponseUtils.success(UPDATE_SUCCESS);
+//        }else{
+//            return ResponseUtils.failure(UPDATE_FAILURE);
+//        }
+//    }
+//    @ApiOperation("更新知识图谱项目主图")
+    @PostMapping("/updateProjectImage")
+//    @PreAuthorize("@securityChecker.checkByProjectId(#projectImageVO.projectId)")
+    public ResponseEntity<ResponseVO> updateProjectImage(HttpServletRequest request) {
+        int id= Integer.parseInt(request.getParameter("projectId"));
+        System.out.println("id:"+id);
+        MultipartFile image = ((MultipartHttpServletRequest) request).getFile("image");
+        String res = projectService.updateProjectImage(id,image);
+        if(!"".equals(res)){
+            return ResponseUtils.success(res);
         }else{
             return ResponseUtils.failure(UPDATE_FAILURE);
         }

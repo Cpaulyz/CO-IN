@@ -86,6 +86,14 @@ export default {
         data: question,
         method: 'POST'
       }
+    },
+    getProjectQueryNew(question) {
+      // question := { text }
+      return {
+        path: `/projectQueryNew`,
+        data: question,
+        method: 'POST'
+      }
     }
   }
 }

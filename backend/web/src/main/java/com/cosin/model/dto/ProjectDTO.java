@@ -24,6 +24,7 @@ public class ProjectDTO {
     private String description;
     private Integer userId;
     private String xml;
+    private String image;
     private LayoutTypeEnum layoutStatus;
     private ProjectStatusEnum status;
 

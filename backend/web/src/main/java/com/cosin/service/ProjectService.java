@@ -4,6 +4,7 @@ import com.cosin.model.dto.ProjectDTO;
 import com.cosin.model.enums.LayoutTypeEnum;
 import com.cosin.model.enums.ProjectStatusEnum;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -58,6 +59,14 @@ public interface ProjectService {
      * @return
      */
     boolean updateProjectDescription(int projectId,String description);
+
+    /**
+     * 更新项目主图
+     * @param projectId
+     * @param image
+     * @return
+     */
+    String updateProjectImage(int projectId, MultipartFile image);
 
     /**
      * 根据projectId获取知识图谱项目信息

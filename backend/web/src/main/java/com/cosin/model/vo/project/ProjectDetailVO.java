@@ -29,6 +29,8 @@ public class ProjectDetailVO {
     private LayoutTypeEnum layoutStatus;
     @ApiModelProperty("导入XML")
     private String xml;
+    @ApiModelProperty("主图url")
+    private String image;
     @ApiModelProperty("公私有")
     private ProjectStatusEnum status;
 

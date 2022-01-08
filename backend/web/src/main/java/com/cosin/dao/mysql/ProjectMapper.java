@@ -15,7 +15,8 @@ public interface ProjectMapper {
     @Results(id = "projectMap", value = {
             @Result(column = "user_id", property = "userId"),
             @Result(column = "id", property = "projectId"),
-            @Result(column = "layout_status", property = "layoutStatus")
+            @Result(column = "layout_status", property = "layoutStatus"),
+            @Result(column = "image_url", property = "image")
     })
     List<ProjectPO> listProjectsByUserId(@Param("userId")int userId,@Param("currIndex") int currIndex, @Param("pageSize") int pageSize);
 
@@ -24,8 +25,8 @@ public interface ProjectMapper {
     int countProjectsByUserId(int userId);
 
 
-    @Insert("insert into project(name,description,user_id,status)" +
-            "values (#{name},#{description},#{userId},#{status})")
+    @Insert("insert into project(name,description,user_id,status,image_url)" +
+            "values (#{name},#{description},#{userId},#{status},#{image})")
     @Options(useGeneratedKeys = true, keyProperty = "projectId")
     int insertProject(ProjectPO projectPO);
 
@@ -41,6 +42,10 @@ public interface ProjectMapper {
             " where id=#{projectId}")
     int updateProjectDescription(@Param("projectId") int projectId, @Param("description") String description);
 
+    @Update("update project set image_url=#{image}" +
+            " where id=#{projectId}")
+    int updateProjectImage(@Param("projectId") int projectId, @Param("image") String image);
+
     @Update("update project set layout_status=#{layoutStatus}" +
             " where id=#{projectId}")
     int updateProjectLayout(@Param("projectId") int projectId, @Param("layoutStatus") LayoutTypeEnum layout);
@@ -48,6 +53,8 @@ public interface ProjectMapper {
     @Update("update project set status=#{status}" +
             " where id=#{projectId}")
     int updateProjectStatus(@Param("projectId") int projectId, @Param("status") ProjectStatusEnum status);
+
+
 
     @Select("select * from project where status='PUBLIC' limit #{currIndex},#{pageSize}")
     @ResultMap(value = "projectMap")

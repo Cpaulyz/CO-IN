@@ -18,6 +18,7 @@ public class ProjectPO {
     private Integer userId;
     private LayoutTypeEnum layoutStatus;
     private ProjectStatusEnum status;
+    private String image;
 
     public ProjectPO(ProjectDTO projectDTO){
         BeanUtils.copyProperties(projectDTO,this);

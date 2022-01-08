@@ -29,14 +29,14 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex';
 
 export default {
   name: 'GraphModifyDescModal',
   data() {
     return {
       newDesc: '',
-    }
+    };
   },
   computed: {
     ...mapGetters(['showModifyDescModal', 'projectInfo']),
@@ -45,28 +45,27 @@ export default {
     ...mapMutations(['setShowModifyDescModal']),
     ...mapActions(['updateProjectDesc']),
     disablePanel() {
-      this.setShowModifyDescModal(false)
+      this.setShowModifyDescModal(false);
     },
     commitUpdateDesc() {
-      const projectId = Number(this.$route.params.projectId)
+      const projectId = Number(this.$route.params.projectId);
       const data = {
         description: this.newDesc,
         projectId,
-      }
-      this.updateProjectDesc(data).then((res) => {
-        const { success, msg } = res
+      };
+      this.updateProjectDesc(data).then(res => {
+        const { success, msg } = res;
         if (success) {
-          this.setShowModifyDescModal(false)
-          this.$message.success(msg)
-          this.$router.go(0)
+          this.setShowModifyDescModal(false);
+          this.$message.success(msg);
+          this.$router.go(0);
         } else {
-          this.$message.error(msg)
+          this.$message.error(msg);
         }
-      })
+      });
     },
   },
-}
+};
 </script>
 
-<style>
-</style>
+<style></style>

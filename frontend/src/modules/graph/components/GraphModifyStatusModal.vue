@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex';
 
 export default {
   name: 'GraphModifyStatusModal',
@@ -40,7 +40,7 @@ export default {
     return {
       newStatus: '',
       currentStatus: '',
-    }
+    };
   },
   computed: {
     ...mapGetters(['showModifyStatusModal', 'projectInfo']),
@@ -49,28 +49,27 @@ export default {
     ...mapMutations(['setShowModifyStatusModal']),
     ...mapActions(['updateProjectStatus']),
     disablePanel() {
-      this.setShowModifyStatusModal(false)
+      this.setShowModifyStatusModal(false);
     },
     commitUpdateStatus() {
-      const projectId = Number(this.$route.params.projectId)
+      const projectId = Number(this.$route.params.projectId);
       const data = {
         status: this.projectInfo.status === 'PUBLIC' ? 'PRIVATE' : 'PUBLIC',
         projectId,
-      }
-      this.updateProjectStatus(data).then((res) => {
-        const { success, msg } = res
+      };
+      this.updateProjectStatus(data).then(res => {
+        const { success, msg } = res;
         if (success) {
-          this.setShowModifyStatusModal(false)
-          this.$message.success(msg)
-          this.$router.go(0)
+          this.setShowModifyStatusModal(false);
+          this.$message.success(msg);
+          this.$router.go(0);
         } else {
-          this.$message.error(msg)
+          this.$message.error(msg);
         }
-      })
+      });
     },
   },
-}
+};
 </script>
 
-<style>
-</style>
+<style></style>
